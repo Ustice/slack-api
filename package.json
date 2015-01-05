@@ -1,0 +1,28 @@
+{
+  "name": "slack-api",
+  "version": "0.0.0",
+  "description": "A javascript API wrapper for Slack.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ustice/slack-api.git"
+  },
+  "keywords": [
+    "slack",
+    "api",
+    "javascript",
+    "node"
+  ],
+  "author": "Jason Kleinberg",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Ustice/slack-api/issues"
+  },
+  "homepage": "https://github.com/Ustice/slack-api",
+  "dependencies": {
+    "querystring": "^0.2.0"
+  }
+}
