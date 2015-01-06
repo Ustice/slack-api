@@ -1056,11 +1056,34 @@ var endpoints = {
       }
     },
     setTopic: {
-      url: 'https://slack.com/api/groups.setTopic',
-      description: 'Sets the topic for a private group.',
+      url: 'https://slack.com/api/groups.setPurpose',
+      description: 'This method is used to change the purpose of a private group. The calling user must be a member of the private group.',
       help: 'https://api.slack.com/methods/groups.setTopic',
-      arguments: [],
-      errors: {}
+      arguments: [
+        token: {
+          required: true,
+          description: 'Authentication token (Requires scope: post)'
+        },
+        channel: {
+          required: true,
+          description: 'Private group to set the purpose of'
+        },
+        purpose: {
+          required: true,
+          description: 'The new purpose'
+        }
+      ],
+      errors: {
+        'channel_not_found': 'Value passed for channel was invalid.',
+        'not_in_channel': 'Authenticated user is not in the private group.',
+        'is_archived': 'Private group has been archived',
+        'too_long': 'Purpose was longer than 250 characters.',
+        'not_authed': 'No authentication token provided.',
+        'invalid_auth': 'Invalid authentication token.',
+        'account_inactive': 'Authentication token is for a deleted user or team.',
+        'user_is_bot': 'This method cannot be called by a bot user.',
+        'user_is_restricted': 'This method cannot be called by a restricted user or single channel guest.',
+      }
     },
     unarchive: {
       url: 'https://slack.com/api/groups.unarchive',
