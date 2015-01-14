@@ -1,6 +1,6 @@
 {
   "name": "slack-api",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A javascript API wrapper for Slack.",
   "main": "index.js",
   "scripts": {
