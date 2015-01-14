@@ -1,9 +1,9 @@
 {
   "api": {
     "test": {
-      "url": "https://slack.com/api/channels.test",
+      "url": "https://slack.com/api/api.test",
       "description": "Checks API calling code. Any arguments passed into this method are returned.",
-      "help": "https://api.slack.com/methods/channels.test",
+      "help": "https://api.slack.com/methods/api.test",
       "arguments": {
         "error": {
           "required": false,
@@ -15,9 +15,9 @@
   },
   "auth": {
     "test": {
-      "url": "https://slack.com/api/channels.test",
+      "url": "https://slack.com/api/auth.test",
       "description": "This method checks authentication and tells you who you are.",
-      "help": "https://api.slack.com/methods/channels.test",
+      "help": "https://api.slack.com/methods/auth.test",
       "arguments": {
         "token": {
           "required": true,
@@ -418,9 +418,9 @@
   },
   "chat": {
     "delete": {
-      "url": "https://slack.com/api/channels.delete",
+      "url": "https://slack.com/api/chat.delete",
       "description": "This method deletes a message from a channel.",
-      "help": "https://api.slack.com/methods/channels.delete",
+      "help": "https://api.slack.com/methods/chat.delete",
       "arguments": {
         "token": {
           "required": true,
@@ -445,9 +445,9 @@
       }
     },
     "postMessage": {
-      "url": "https://slack.com/api/channels.postMessage",
+      "url": "https://slack.com/api/chat.postMessage",
       "description": "Sends a message to a channel.",
-      "help": "https://api.slack.com/methods/channels.postMessage",
+      "help": "https://api.slack.com/methods/chat.postMessage",
       "arguments": {
         "token": {
           "required": true,
@@ -507,9 +507,9 @@
       }
     },
     "update": {
-      "url": "https://slack.com/api/channels.update",
+      "url": "https://slack.com/api/chat.update",
       "description": "This method updates a message in a channel.",
-      "help": "https://api.slack.com/methods/channels.update",
+      "help": "https://api.slack.com/methods/chat.update",
       "arguments": {
         "token": {
           "required": true,
@@ -543,9 +543,9 @@
   },
   "emoji": {
     "list": {
-      "url": "https://slack.com/api/channels.list",
+      "url": "https://slack.com/api/emoji.list",
       "description": "This method lists the custom emoji for a team.",
-      "help": "https://api.slack.com/methods/channels.list",
+      "help": "https://api.slack.com/methods/emoji.list",
       "arguments": {
         "token": {
           "required": true,
@@ -561,9 +561,9 @@
   },
   "files": {
     "info": {
-      "url": "https://slack.com/api/channels.info",
+      "url": "https://slack.com/api/files.info",
       "description": "This method returns information about a file in your team.",
-      "help": "https://api.slack.com/methods/channels.info",
+      "help": "https://api.slack.com/methods/files.info",
       "arguments": {
         "token": {
           "required": true,
@@ -592,9 +592,9 @@
       }
     },
     "list": {
-      "url": "https://slack.com/api/channels.list",
+      "url": "https://slack.com/api/files.list",
       "description": "Lists & filters team files.",
-      "help": "https://api.slack.com/methods/channels.list",
+      "help": "https://api.slack.com/methods/files.list",
       "arguments": {
         "token": {
           "required": true,
@@ -635,9 +635,9 @@
       }
     },
     "upload": {
-      "url": "https://slack.com/api/channels.upload",
+      "url": "https://slack.com/api/files.upload",
       "description": "This method allows you to create or upload an existing file.",
-      "help": "https://api.slack.com/methods/channels.upload",
+      "help": "https://api.slack.com/methods/files.upload",
       "arguments": {
         "token": {
           "required": true,
@@ -1155,7 +1155,7 @@
         "user_is_bot'": "This method cannot be called by a bot user."
       }
     },
-    ".mark": {
+    "mark": {
       "url": "https://slack.com/api/im.mark",
       "description": "This method moves the read cursor in a direct message channel.",
       "help": "https://api.slack.com/methods/im.mark",
@@ -1181,7 +1181,7 @@
         "account_inactive'": "Authentication token is for a deleted user or team."
       }
     },
-    ".open": {
+    "open": {
       "url": "https://slack.com/api/im.open",
       "description": "Opens a direct message channel.",
       "help": "https://api.slack.com/methods/im.open",
