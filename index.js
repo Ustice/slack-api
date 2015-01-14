@@ -9,7 +9,6 @@ var querystring = require('querystring');
 var endpoints = require(__dirname + '/api-endpoints.json');
 
 // Custom Errors
-var AuthenticationError = errorFactory('AuthenticationError');
 var CommunicationError = errorFactory('CommunicationError');
 var SlackError = errorFactory('SlackError');
 
@@ -18,6 +17,9 @@ var api = _.mapValues(endpoints, function (section, sectionName) {
       return apiMethod(sectionName, methodName);
   });
 });
+
+api.errors = [SlackError, CommunicationError];
+api.errorFactory = errorFactory;
 
 function apiMethod (sectionName, methodName) {
   return function callApi (args, done) {
