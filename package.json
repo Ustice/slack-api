@@ -4,7 +4,7 @@
   "description": "A javascript API wrapper for Slack.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test"
+    "test": "mocha tests/api.js"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,11 @@
   },
   "homepage": "https://github.com/Ustice/slack-api",
   "dependencies": {
-    "querystring": "^0.2.0"
+    "bluebird": "^2.6.4",
+    "lodash": "^2.4.1"
+  },
+  "devDependencies": {
+    "chai": "^1.10.0",
+    "mocha": "^2.1.0"
   }
 }
