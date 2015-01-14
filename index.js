@@ -3,7 +3,6 @@
 var _ = require('lodash');
 var errorFactory = require(__dirname + '/lib/error-factory');
 var https = require('https');
-// var Promise = require('bluebird');
 var querystring = require('querystring');
 
 var endpoints = require(__dirname + '/api-endpoints.json');
