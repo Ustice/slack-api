@@ -17,7 +17,10 @@ var api = _.mapValues(endpoints, function (section, sectionName) {
   });
 });
 
-api.errors = [SlackError, CommunicationError];
+api.errors = {
+  SlackError: SlackError,
+  CommunicationError: CommunicationError
+};
 api.errorFactory = errorFactory;
 
 function apiMethod (sectionName, methodName) {
