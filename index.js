@@ -23,9 +23,7 @@ api.errors = {
 };
 api.errorFactory = errorFactory;
 
-api.oauth.getUrl = function authorise (options) {
-  var chunks = [];
-
+api.oauth.getUrl = function getUrl (options) {
   if (typeof options === 'string') {
     options = {client_id: options};
   }
@@ -37,6 +35,34 @@ api.oauth.getUrl = function authorise (options) {
   options.state = options.state || Math.random();
 
   return 'https://slack.com/oauth/authorize?' + querystring.stringify(options);
+};
+
+api.oauth.access = function authorize (options, state, done) {
+  // Polymorphism
+  if (_.isFunction(state) && _.isUndefined(done)) {
+    done = state;
+    state = null;
+  }
+
+  // Error Handling
+  if (!done || !_.isFunction(done)) {
+    done = function noop () {};
+  }
+
+  if (!options) {
+    return done(new ReferenceError('oauth.access requires an options Object as a first argument.'), null);
+  }
+
+  if (_.isArray(options) || _.isString(options) || _.isFunction(options)) {
+    return done(new TypeError('oauth.access requires an options Object as a first argument.'), null);
+  }
+
+  if (state && options.state && state !== options.state) {
+    return done(new SlackError('States do not match. WARNING! This could mean that the authentication was a forgery.'), null);
+  }
+
+  // Access authentication
+  return apiMethod('oauth', 'access')(options, done);
 };
 
 function apiMethod (sectionName, methodName) {

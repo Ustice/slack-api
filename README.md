@@ -38,7 +38,7 @@ This method generates the url used for step 1 of the [Slack OAuth](https://api.s
 
 #### Arguments
 
-1. *options* _(Object)_ - options hash should have the following properties:
+1. **options** _(Object)_ - options hash should have the following properties:
   ````
   client_id    - issued when you created your application (required)
   redirect_uri - URL to redirect back to (see below) (optional)
@@ -50,6 +50,27 @@ This method generates the url used for step 1 of the [Slack OAuth](https://api.s
 #### Returns
 
 _(String)_ - Returns the url that the user should be redirected to to start the OAuth process for slack.
+
+### oauth.access(options, [state], [callback=noop])
+
+This method allows you to exchange a temporary OAuth code for an API access token. This is used as part of the OAuth authentication flow.
+
+This method will optionally perform the state check for you, should you provide it.
+
+#### Arguments
+1. **options** _(Object)_ - options hash should have the following properties:
+  ````
+  client_id     - issued when you created your application (required)
+  client_secret	- issued when you created your application (required)
+  code	        - the code param returned via the OAuth callback (required)
+  redirect_uri	- this must match the originally submitted URI (if one was sent)
+  ````
+2. **[state]** _(String)_ - unique string passed to the original authorization call (optional)
+3. **[callback=noop]** _(Function)_ - Function to be called upon completion. If none is provided, this method will simply execute silently.
+
+#### Returns
+
+This method invokes the `callback` argument function in the standard node.js style (`callback(error, data)`).
 
 ## Errors
 
