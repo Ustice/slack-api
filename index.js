@@ -23,6 +23,22 @@ api.errors = {
 };
 api.errorFactory = errorFactory;
 
+api.oauth.getUrl = function authorise (options) {
+  var chunks = [];
+
+  if (typeof options === 'string') {
+    options = {client_id: options};
+  }
+
+  if (!options || !options.client_id) {
+    throw new ReferenceError('A client_id is required for this method.');
+  }
+
+  options.state = options.state || Math.random();
+
+  return 'https://slack.com/oauth/authorize?' + querystring.stringify(options);
+};
+
 function apiMethod (sectionName, methodName) {
   return function callApi (args, done) {
     var chunks = [];
