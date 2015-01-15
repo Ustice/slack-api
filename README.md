@@ -39,6 +39,7 @@ This method generates the url used for step 1 of the [Slack OAuth](https://api.s
 #### Arguments
 
 1. **options** _(Object)_ - options hash should have the following properties:
+
   ````
   client_id    - issued when you created your application (required)
   redirect_uri - URL to redirect back to (see below) (optional)
@@ -59,6 +60,7 @@ This method will optionally perform the state check for you, should you provide 
 
 #### Arguments
 1. **options** _(Object)_ - options hash should have the following properties:
+  
   ````
   client_id     - issued when you created your application (required)
   client_secret	- issued when you created your application (required)
