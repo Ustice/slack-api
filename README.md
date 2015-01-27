@@ -14,7 +14,7 @@ npm install --save slack-api
 
 _slack-api_ uses the same structure as the Slack Web API, and follows Node convention for calling methods.
 
-```` (javascript)
+````javascript
 'use strict';
 
 var Slack = require('slack-api');
@@ -78,7 +78,7 @@ This method invokes the `callback` argument function in the standard node.js sty
 
 This method returns a [promisified](https://github.com/petkaantonov/bluebird) version of the Slack API library.
 
-```` (javascript)
+````javascript
 'use strict';
 
 var Slack = require('slack-api').promisify();
