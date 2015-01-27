@@ -2,7 +2,7 @@
 
 var chai = require('chai');
 var api = require(__dirname + '/../index');
-var errorFactory = require(__dirname + '/../lib/error-factory');
+var errorFactory = require('error-factory');
 
 // Custom Errors
 var AuthenticationError = errorFactory('AuthenticationError');
@@ -67,6 +67,36 @@ describe('SlackAPI', function () {
           expect(data.user).to.be.ok;
           done();
         });
+      });
+    });
+  });
+  describe('promisification', function () {
+    before(function () {
+      api = api.promisify();
+     });
+
+    describe('api', function () {
+      describe('test', function () {
+        it('should return okay when not given an error', function (done) {
+          api.api.test({}).then(function (data) {
+            expect(data.ok).to.be.true;
+            done();
+          }).catch(function (error) {
+            done(error);
+          });
+        });
+        it('should return an error, when given an error argument', function (done) {
+          api.api.test({error: 'test_error'}).then(function (data) {
+            expect(data.ok).to.be.false;
+            expect(data.error).to.equal('test_error');
+            done();
+          }).catch(api.errors.SlackError, function (error) {
+            expect(error).to.be.an.instanceof(api.errors.SlackError);
+            done();
+          }).catch(function (error) {
+            done(error);
+          });
+        })
       });
     });
   });

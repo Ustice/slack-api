@@ -74,6 +74,20 @@ This method will optionally perform the state check for you, should you provide 
 
 This method invokes the `callback` argument function in the standard node.js style (`callback(error, data)`).
 
+### promisify()
+
+This method returns a [promisified](https://github.com/petkaantonov/bluebird) version of the Slack API library.
+
+```` (javascript)
+'use strict';
+
+var Slack = require('slack-api').promisify();
+
+Slack.api.test({}, function (error, data) {
+  console.log(data);
+});
+````
+
 ## Errors
 
 The slack-api comes with some custom errors, and their constructors are included under the `errors` property.

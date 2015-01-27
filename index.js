@@ -1,9 +1,10 @@
 'use strict';
 
 var _ = require('lodash');
-var errorFactory = require(__dirname + '/lib/error-factory');
+var errorFactory = require('error-factory');
 var querystring = require('querystring');
 var request = require('superagent');
+var Promise = require('bluebird');
 
 var endpoints = require(__dirname + '/api-endpoints.json');
 
@@ -21,7 +22,6 @@ api.errors = {
   SlackError: SlackError,
   CommunicationError: CommunicationError
 };
-api.errorFactory = errorFactory;
 
 api.oauth.getUrl = function getUrl(options) {
   if (typeof options === 'string') {
@@ -66,6 +66,15 @@ api.oauth.access = function authorize(options, state, done) {
   // Access authentication
   return apiMethod('oauth', 'access')(options, done);
 };
+
+function promisify () {
+  return _.mapValues(api, function (section, sectionName) {
+    if (sectionName === 'errors') return section;
+    return _.mapValues(section, function (method, name) {
+      return Promise.promisify(method);
+    });
+  });
+}
 
 function apiMethod(sectionName, methodName) {
   return function callApi(args, done) {
@@ -125,4 +134,5 @@ function collectRequiredArgs(configuredArgs) {
   });
 }
 
+api.promisify = promisify;
 module.exports = api;
