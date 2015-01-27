@@ -591,6 +591,30 @@
         "user_is_bot'": "This method cannot be called by a bot user."
       }
     },
+    "delete": {
+      "url": "https://slack.com/api/files.delete",
+      "description": "This method deletes a file in your team.",
+      "help": "This endpoint is not yet officially in the Slack API and may change!",
+      "arguments": {
+        "t": {
+          "required": true,
+          "description": "Current datetime in msec"
+        },
+        "token": {
+          "required": true,
+          "description": "Authentication token (Requires scope: read)"
+        },
+        "file": {
+          "required": true,
+          "description": "File to fetch info for"
+        }
+      },
+      "errors": {
+        "file_not_found'": "Value passed for file was invalid",
+        "not_authed'": "No authentication token provided.",
+        "invalid_auth'": "Invalid authentication token."
+      }
+    },
     "list": {
       "url": "https://slack.com/api/files.list",
       "description": "Lists & filters team files.",
