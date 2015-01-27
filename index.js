@@ -106,16 +106,16 @@ function apiMethod(sectionName, methodName) {
     url = config.url + '?' + querystring.stringify(args);
 
     request
-      .get(url)
-      .end(function(err, response) {
-        if (err) {
-          throw new CommunicationError('Communication error while posting message to Slack. ' + error);
-        } else {
-          if (!response.body.ok)
-            return done(new SlackError(config.errors[response.body.error] || response.body.error), response.body);
-          done(null, response.body);
-        }
-      });
+    .get(url)
+    .end(function(error, response) {
+      if (error) {
+        throw new CommunicationError('Communication error while posting message to Slack. ' + error);
+      } else {
+        if (!response.body.ok)
+          return done(new SlackError(config.errors[response.body.error] || response.body.error), response.body);
+        done(null, response.body);
+      }
+    });
   };
 }
 
