@@ -30,7 +30,7 @@ _slack-api_ shares the same methods as the Slack Web API, but with a few additio
 
 You can find the full Slack Web API documentation on [their site](https://api.slack.com/methods).
 
-If _slack-api_ is missing a method [let us know](https://github.com/ustice/slack-api/issues), or better yet, [update it](#developemnt-and-testing).
+If _slack-api_ is missing a method [let us know](https://github.com/ustice/slack-api/issues), or better yet, [update it](#development-and-testing).
 
 ### oauth.getUrl(options)
 
@@ -60,7 +60,7 @@ This method will optionally perform the state check for you, should you provide 
 
 #### Arguments
 1. **options** _(Object)_ - options hash should have the following properties:
-  
+
   ````
   client_id     - issued when you created your application (required)
   client_secret	- issued when you created your application (required)
