@@ -4,7 +4,7 @@
   "description": "A javascript API wrapper for Slack.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha tests/api.js"
+    "test": "mocha tests/apiTest.js"
   },
   "repository": {
     "type": "git",
@@ -20,18 +20,15 @@
     "name": "Jason Kleinberg",
     "email": "ustice@gmail.com"
   },
-  "contributors": [
-    {
-      "name": "Jason Kleinberg",
-      "github": "https://github.com/Ustice",
-      "email": "ustice@gmail.com"
-    },
-    {
-      "name": "Raj",
-      "github": "https://github.com/nraomobiquityinc",
-      "email": "nrao@mobiquityinc.com"
-    }
-  ],
+  "contributors": [{
+    "name": "Jason Kleinberg",
+    "github": "https://github.com/Ustice",
+    "email": "ustice@gmail.com"
+  }, {
+    "name": "Raj",
+    "github": "https://github.com/nraomobiquityinc",
+    "email": "nrao@mobiquityinc.com"
+  }],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/ustice/slack-api/issues"
