@@ -2,8 +2,8 @@
 
 var _ = require('lodash');
 var errorFactory = require(__dirname + '/lib/error-factory');
-var https = require('https');
 var querystring = require('querystring');
+var request = require('superagent');
 
 var endpoints = require(__dirname + '/api-endpoints.json');
 
@@ -11,9 +11,9 @@ var endpoints = require(__dirname + '/api-endpoints.json');
 var CommunicationError = errorFactory('CommunicationError');
 var SlackError = errorFactory('SlackError');
 
-var api = _.mapValues(endpoints, function (section, sectionName) {
-  return _.mapValues(section, function (method, methodName) {
-      return apiMethod(sectionName, methodName);
+var api = _.mapValues(endpoints, function(section, sectionName) {
+  return _.mapValues(section, function(method, methodName) {
+    return apiMethod(sectionName, methodName);
   });
 });
 
@@ -23,9 +23,11 @@ api.errors = {
 };
 api.errorFactory = errorFactory;
 
-api.oauth.getUrl = function getUrl (options) {
+api.oauth.getUrl = function getUrl(options) {
   if (typeof options === 'string') {
-    options = {client_id: options};
+    options = {
+      client_id: options
+    };
   }
 
   if (!options || !options.client_id) {
@@ -37,7 +39,7 @@ api.oauth.getUrl = function getUrl (options) {
   return 'https://slack.com/oauth/authorize?' + querystring.stringify(options);
 };
 
-api.oauth.access = function authorize (options, state, done) {
+api.oauth.access = function authorize(options, state, done) {
   // Polymorphism
   if (_.isFunction(state) && _.isUndefined(done)) {
     done = state;
@@ -46,7 +48,7 @@ api.oauth.access = function authorize (options, state, done) {
 
   // Error Handling
   if (!done || !_.isFunction(done)) {
-    done = function noop () {};
+    done = function noop() {};
   }
 
   if (!options) {
@@ -65,11 +67,10 @@ api.oauth.access = function authorize (options, state, done) {
   return apiMethod('oauth', 'access')(options, done);
 };
 
-function apiMethod (sectionName, methodName) {
-  return function callApi (args, done) {
-    var chunks = [];
+function apiMethod(sectionName, methodName) {
+  return function callApi(args, done) {
     var config;
-    var requiredArgs;
+    var requiredArgsList;
     var url;
 
     // Polymorphism
@@ -78,7 +79,7 @@ function apiMethod (sectionName, methodName) {
       args = {};
     } else if (_.isUndefined(done) && _.isUndefined(args)) {
       args = {};
-      done = function () {};
+      done = function() {};
     }
 
     if (!api.hasOwnProperty(sectionName)) {
@@ -91,38 +92,37 @@ function apiMethod (sectionName, methodName) {
 
     config = endpoints[sectionName][methodName];
 
-    requiredArgs = _.reject(_.keys(config.arguments), function (key) {
-      return !config.arguments[key].required;
-    });
-
-    _.each(requiredArgs, function (arg) {
-      if (_.isUndefined(args[arg])) {
-        throw new TypeError('API Method, ' + sectionName + '#' + methodName + ', requires the following args: ' + requiredArgs.join(', '));
-      }
-    });
+    checkRequiredArgsPresent(args, config);
 
     url = config.url + '?' + querystring.stringify(args);
 
-    https.get(url, function (response) {
-      var responseText = "";
-      response.on('data', function (chunk) {
-        chunks.push(chunk);
-      });
-
-      response.on('end', function (data) {
-        var res = JSON.parse(chunks.join(''));
-        if (!res.ok) {
-          return done(new SlackError(config.errors[res.error] || res.error), res);
+    request
+      .get(url)
+      .end(function(err, response) {
+        if (err) {
+          throw new CommunicationError('Communication error while posting message to Slack. ' + error);
+        } else {
+          if (!response.body.ok)
+            return done(new SlackError(config.errors[response.body.error] || response.body.error), response.body);
+          done(null, response.body);
         }
-
-        done(null, res);
       });
-
-      response.on('error', function (error) {
-        throw new CommunicationError('Communication error while posting message to Slack. ' + error);
-      })
-    }).end();
   };
+}
+
+function checkRequiredArgsPresent(actualArgs, config) {
+  var requiredArgsList = collectRequiredArgs(config.arguments);
+  _.each(requiredArgsList, function(requiredArg) {
+    if (_.isUndefined(actualArgs[requiredArg])) {
+      throw new TypeError('API Method, ' + config.sectionName + '#' + config.methodName + ', requires the following args: ' + requiredArgsList.join(', '));
+    }
+  });
+}
+
+function collectRequiredArgs(configuredArgs) {
+  return _.filter(_.keys(configuredArgs), function(key) {
+    return configuredArgs[key].required;
+  });
 }
 
 module.exports = api;
