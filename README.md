@@ -96,8 +96,8 @@ Slack.api.test({}).then(function (data) {
 
 The slack-api comes with some custom errors, and their constructors are included under the `errors` property.
 
-* CommunicationError - This error is thrown if the https request fails.
-* SlackError - If Slack returns an error, this will be passed to the callback function as the first argument for error-handling.
+* `CommunicationError` - This error is thrown if the https request fails.
+* `SlackError` - If Slack returns an error, this will be passed to the callback function as the first argument for error-handling.
 
 ## Development and testing
 
