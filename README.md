@@ -83,8 +83,12 @@ This method returns a [promisified](https://github.com/petkaantonov/bluebird) ve
 
 var Slack = require('slack-api').promisify();
 
-Slack.api.test({}, function (error, data) {
+Slack.api.test({}).then(function (data) {
   console.log(data);
+}).catch(Slack.errors.SlackError, function (error) {
+  console.log('Slack did not like what you did: ' + error.message);
+}).catch(Slack.errors.CommunicationError, function (error) {
+  console.error('Error communicating with Slack. ' + error.message);
 });
 ````
 
