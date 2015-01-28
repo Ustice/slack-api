@@ -3,6 +3,7 @@
 var chai = require('chai');
 var api = require(__dirname + '/../index');
 var errorFactory = require('error-factory');
+var should = require("should");
 
 // Custom Errors
 var AuthenticationError = errorFactory('AuthenticationError');
@@ -21,18 +22,20 @@ if (!SLACK_TOKEN) {
   process.exit(1);
 }
 
-describe('SlackAPI', function () {
+describe('SlackAPI', function() {
   this.timeout(5000);
-  describe('api', function () {
-    describe('test', function () {
-      it('should return okay when not given an error', function (done) {
-        api.api.test({}, function (error, data) {
+  describe('api', function() {
+    describe('test', function() {
+      it('should return okay when not given an error', function(done) {
+        api.api.test({}, function(error, data) {
           expect(data.ok).to.be.true;
           done();
         });
       });
-      it('should return an error, when given an error argument', function (done) {
-        api.api.test({error: 'test_error'}, function (error, data) {
+      it('should return an error, when given an error argument', function(done) {
+        api.api.test({
+          error: 'test_error'
+        }, function(error, data) {
           expect(data.ok).to.be.false;
           expect(data.error).to.equal('test_error');
           done();
@@ -40,28 +43,33 @@ describe('SlackAPI', function () {
       })
     });
   });
-  describe('auth', function () {
-    describe('test', function () {
-      it('should throw an error when no token is passed', function (done) {
+  describe('auth', function() {
+    describe('test', function() {
+      it('should throw an error when no token is passed', function(done) {
         try {
-          api.auth.test({}, function (error, data) {
-            done(new Error('Method should not return a value, but instead throw an error.'));
+          api.auth.test({}, function(error, data) {
+            throw error;
           });
         } catch (error) {
           expect(error).to.be.an.instanceOf(TypeError);
+          error.message.should.equal("API Method, auth#test, requires the following args: token");
           done();
         }
 
       });
-      it('should fail as invalid_auth when an invalid token is passed', function (done) {
-        api.auth.test({token: 'BAD TOKEN'}, function (error, data) {
+      it('should fail as invalid_auth when an invalid token is passed', function(done) {
+        api.auth.test({
+          token: 'BAD TOKEN'
+        }, function(error, data) {
           expect(error).to.be.ok;
           expect(data.error).to.equal('invalid_auth');
           done();
         });
       });
-      it('should return user data when the token is valid', function (done) {
-        api.auth.test({token: SLACK_TOKEN}, function (error, data) {
+      it('should return user data when the token is valid', function(done) {
+        api.auth.test({
+          token: SLACK_TOKEN
+        }, function(error, data) {
           expect(error).to.be.null;
           expect(data.ok).to.be.true;
           expect(data.user).to.be.ok;
@@ -70,30 +78,32 @@ describe('SlackAPI', function () {
       });
     });
   });
-  describe('promisification', function () {
-    before(function () {
+  describe('promisification', function() {
+    before(function() {
       api = api.promisify();
-     });
+    });
 
-    describe('api', function () {
-      describe('test', function () {
-        it('should return okay when not given an error', function (done) {
-          api.api.test({}).then(function (data) {
+    describe('api', function() {
+      describe('test', function() {
+        it('should return okay when not given an error', function(done) {
+          api.api.test({}).then(function(data) {
             expect(data.ok).to.be.true;
             done();
-          }).catch(function (error) {
+          }).catch(function(error) {
             done(error);
           });
         });
-        it('should return an error, when given an error argument', function (done) {
-          api.api.test({error: 'test_error'}).then(function (data) {
+        it('should return an error, when given an error argument', function(done) {
+          api.api.test({
+            error: 'test_error'
+          }).then(function(data) {
             expect(data.ok).to.be.false;
             expect(data.error).to.equal('test_error');
             done();
-          }).catch(api.errors.SlackError, function (error) {
+          }).catch(api.errors.SlackError, function(error) {
             expect(error).to.be.an.instanceof(api.errors.SlackError);
             done();
-          }).catch(function (error) {
+          }).catch(function(error) {
             done(error);
           });
         })

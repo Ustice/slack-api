@@ -9,8 +9,16 @@ var Promise = require('bluebird');
 var endpoints = require(__dirname + '/api-endpoints.json');
 
 // Custom Errors
+// indicates errors such as a network failure or timeout
 var CommunicationError = errorFactory('CommunicationError');
+
+// indicates errors returned by Slack e.g. for incorrect parameters supplied for an endpoint
 var SlackError = errorFactory('SlackError');
+
+// signifies that a non-200 status code was returned by Slack. This is different from
+// SlackError because Slack returns a 200 status code for the kinds of errors
+// identified by SlackError
+var SlackServiceError = errorFactory('SlackServiceError');
 
 var api = _.mapValues(endpoints, function(section, sectionName) {
   return _.mapValues(section, function(method, methodName) {
@@ -20,10 +28,11 @@ var api = _.mapValues(endpoints, function(section, sectionName) {
 
 api.errors = {
   SlackError: SlackError,
+  SlackServiceError: SlackServiceError,
   CommunicationError: CommunicationError
 };
 
-api.oauth.getUrl = function getUrl(options) {
+api.oauth.getUrl = function getUrl(options, done) {
   if (typeof options === 'string') {
     options = {
       client_id: options
@@ -31,12 +40,16 @@ api.oauth.getUrl = function getUrl(options) {
   }
 
   if (!options || !options.client_id) {
-    throw new ReferenceError('A client_id is required for this method.');
+    return done(new ReferenceError('A client_id is required for this method.'), null);
   }
 
   options.state = options.state || Math.random();
 
-  return 'https://slack.com/oauth/authorize?' + querystring.stringify(options);
+  if (!done || !_.isFunction(done)) {
+    done = function noop() {};
+  }
+
+  return done(null, 'https://slack.com/oauth/authorize?' + querystring.stringify(options));
 };
 
 api.oauth.access = function authorize(options, state, done) {
@@ -67,10 +80,16 @@ api.oauth.access = function authorize(options, state, done) {
   return apiMethod('oauth', 'access')(options, done);
 };
 
-function promisify () {
-  return _.mapValues(api, function (section, sectionName) {
+function promisify() {
+  //make sure to bubble up errors instead of console.error'ing them via Bluebird
+  //so that client code can add their own catch and error handling
+  Promise.onPossiblyUnhandledRejection(function(error) {
+    throw error;
+  });
+
+  return _.mapValues(api, function(section, sectionName) {
     if (sectionName === 'errors') return section;
-    return _.mapValues(section, function (method, name) {
+    return _.mapValues(section, function(method, name) {
       return Promise.promisify(method);
     });
   });
@@ -92,40 +111,44 @@ function apiMethod(sectionName, methodName) {
     }
 
     if (!api.hasOwnProperty(sectionName)) {
-      throw new ReferenceError('API object, ' + sectionName + ', does not exist.');
+      return done(new ReferenceError('API object, ' + sectionName + ', does not exist.'), null);
     }
 
     if (!api[sectionName].hasOwnProperty(methodName)) {
-      throw new ReferenceError('API Method, ' + sectionName + '#' + methodName + ', does not exist.');
+      return done(new ReferenceError('API Method, ' + sectionName + '#' + methodName + ', does not exist.'), null);
     }
 
     config = endpoints[sectionName][methodName];
 
-    checkRequiredArgsPresent(args, config);
+    var requiredArgsList = collectRequiredArgs(config.arguments);
+    _.each(requiredArgsList, function(requiredArg) {
+      if (_.isUndefined(args[requiredArg])) {
+        return done(new TypeError('API Method, ' + sectionName + '#' + methodName + ', requires the following args: ' + requiredArgsList.join(', ')), null);
+      }
+    });
 
     url = config.url + '?' + querystring.stringify(args);
 
     request
-    .get(url)
-    .end(function(error, response) {
-      if (error) {
-        throw new CommunicationError('Communication error while posting message to Slack. ' + error);
-      } else {
-        if (!response.body.ok)
-          return done(new SlackError(config.errors[response.body.error] || response.body.error), response.body);
-        done(null, response.body);
-      }
-    });
-  };
-}
-
-function checkRequiredArgsPresent(actualArgs, config) {
-  var requiredArgsList = collectRequiredArgs(config.arguments);
-  _.each(requiredArgsList, function(requiredArg) {
-    if (_.isUndefined(actualArgs[requiredArg])) {
-      throw new TypeError('API Method, ' + config.sectionName + '#' + config.methodName + ', requires the following args: ' + requiredArgsList.join(', '));
-    }
-  });
+      .get(url)
+      .end(function(error, response) {
+        if (error) {
+          return done(new CommunicationError('Communication error while posting message to Slack. ' + error), null);
+        } else {
+          if (response.ok) {
+            if (!response.body.ok) {
+              return done(new SlackError(config.errors[response.body.error] || response.body.error), response.body);
+            }
+            done(null, response.body);
+          } else {
+            return done(new SlackServiceError("Did not receive a successful HTTP response from Slack, " + JSON.stringify({
+              errorCode: response.statusCode,
+              errorResponse: response.body
+            })), null);
+          }
+        }
+      });
+  }
 }
 
 function collectRequiredArgs(configuredArgs) {
