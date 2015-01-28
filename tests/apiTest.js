@@ -101,6 +101,8 @@ describe('SlackAPI', function() {
             expect(data.error).to.equal('test_error');
             done();
           }).catch(api.errors.SlackError, function(error) {
+            console.log(error.blah)
+            console.log(error.errorDetails)
             expect(error).to.be.an.instanceof(api.errors.SlackError);
             done();
           }).catch(function(error) {

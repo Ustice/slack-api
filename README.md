@@ -91,6 +91,10 @@ Slack.api.test({}).then(function (data) {
   console.log('Slack did not like what you did: ' + error.message);
 }).catch(Slack.errors.CommunicationError, function (error) {
   console.error('Error communicating with Slack. ' + error.message);
+}).catch(Slack.errors.SlackServiceError, function (error) {
+  console.error('Error communicating with Slack. ' + error.message);
+  //To get error details
+  console.error(error.errorDetails);
 });
 ````
 
@@ -100,7 +104,7 @@ The slack-api comes with some custom errors, and their constructors are included
 
 * `CommunicationError` - This error is thrown if the https request fails e.g. because of a network problem.
 * `SlackError` - If Slack returns an error, this error will be passed to the callback function as the first argument for error-handling.
-* `SlackServiceError` - If Slack returns a non-200 status code, this error will be passed to the callback function as the first argument for error-handling. `SlackServiceError` is different from `SlackError` because the Slack API returns a `200` status code for the kinds of errors identified by `SlackError`.
+* `SlackServiceError` - If Slack returns a non-200 status code, this error will be passed to the callback function as the first argument for error-handling. The error details are provided as a property on the error called `errorDetails`. `SlackServiceError` is different from `SlackError` because the Slack API returns a `200` status code for the kinds of errors identified by `SlackError`. 
 
 ## Development and testing
 
@@ -115,4 +119,3 @@ Tests are written for mocha, and can be run with
 ````
 npm test
 ````
-

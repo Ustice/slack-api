@@ -18,7 +18,7 @@ var SlackError = errorFactory('SlackError');
 // signifies that a non-200 status code was returned by Slack. This is different from
 // SlackError because Slack returns a 200 status code for the kinds of errors
 // identified by SlackError
-var SlackServiceError = errorFactory('SlackServiceError');
+var SlackServiceError = errorFactory('SlackServiceError', ['message', 'errorDetails']);
 
 var api = _.mapValues(endpoints, function(section, sectionName) {
   return _.mapValues(section, function(method, methodName) {
@@ -40,7 +40,7 @@ api.oauth.getUrl = function getUrl(options, done) {
   }
 
   if (!options || !options.client_id) {
-    return done(new ReferenceError('A client_id is required for this method.'), null);
+    throw new ReferenceError('A client_id is required for this method.');
   }
 
   options.state = options.state || Math.random();
@@ -65,11 +65,11 @@ api.oauth.access = function authorize(options, state, done) {
   }
 
   if (!options) {
-    return done(new ReferenceError('oauth.access requires an options Object as a first argument.'), null);
+    throw new ReferenceError('oauth.access requires an options Object as a first argument.');
   }
 
   if (_.isArray(options) || _.isString(options) || _.isFunction(options)) {
-    return done(new TypeError('oauth.access requires an options Object as a first argument.'), null);
+    throw new TypeError('oauth.access requires an options Object as a first argument.');
   }
 
   if (state && options.state && state !== options.state) {
@@ -111,11 +111,11 @@ function apiMethod(sectionName, methodName) {
     }
 
     if (!api.hasOwnProperty(sectionName)) {
-      return done(new ReferenceError('API object, ' + sectionName + ', does not exist.'), null);
+      throw new ReferenceError('API object, ' + sectionName + ', does not exist.');
     }
 
     if (!api[sectionName].hasOwnProperty(methodName)) {
-      return done(new ReferenceError('API Method, ' + sectionName + '#' + methodName + ', does not exist.'), null);
+      throw new ReferenceError('API Method, ' + sectionName + '#' + methodName + ', does not exist.');
     }
 
     config = endpoints[sectionName][methodName];
@@ -123,7 +123,7 @@ function apiMethod(sectionName, methodName) {
     var requiredArgsList = collectRequiredArgs(config.arguments);
     _.each(requiredArgsList, function(requiredArg) {
       if (_.isUndefined(args[requiredArg])) {
-        return done(new TypeError('API Method, ' + sectionName + '#' + methodName + ', requires the following args: ' + requiredArgsList.join(', ')), null);
+        throw new TypeError('API Method, ' + sectionName + '#' + methodName + ', requires the following args: ' + requiredArgsList.join(', '));
       }
     });
 
@@ -141,10 +141,12 @@ function apiMethod(sectionName, methodName) {
             }
             done(null, response.body);
           } else {
-            return done(new SlackServiceError("Did not receive a successful HTTP response from Slack, " + JSON.stringify({
-              errorCode: response.statusCode,
-              errorResponse: response.body
-            })), null);
+            return done(new SlackServiceError('Did not receive a successful response from Slack.', {
+              errorDetails: {
+                errorCode: response.statusCode,
+                errorResponse: response.body
+              }
+            }), null);
           }
         }
       });
