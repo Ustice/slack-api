@@ -32,7 +32,7 @@ You can find the full Slack Web API documentation on [their site](https://api.sl
 
 If _slack-api_ is missing a method [let us know](https://github.com/ustice/slack-api/issues), or better yet, [update it](#development-and-testing).
 
-### oauth.getUrl(options)
+### oauth.getUrl(options, [callback=noop])
 
 This method generates the url used for step 1 of the [Slack OAuth](https://api.slack.com/docs/oauth) flow.
 
@@ -47,10 +47,12 @@ This method generates the url used for step 1 of the [Slack OAuth](https://api.s
   state        - unique string to be passed back upon completion
   team         - Slack team ID to restrict to (optional)
   ````
+2. **[callback=noop]** _(Function)_ - Function to be called upon completion. If none is provided, this method will simply execute silently.
 
 #### Returns
 
-_(String)_ - Returns the url that the user should be redirected to to start the OAuth process for slack.
+This method invokes the `callback` argument function in the standard node.js style (`callback(error, data)`), where `data` is the url _(String)_
+that the user should be redirected to to start the OAuth process for slack.
 
 ### oauth.access(options, [state], [callback=noop])
 
@@ -96,8 +98,9 @@ Slack.api.test({}).then(function (data) {
 
 The slack-api comes with some custom errors, and their constructors are included under the `errors` property.
 
-* `CommunicationError` - This error is thrown if the https request fails.
-* `SlackError` - If Slack returns an error, this will be passed to the callback function as the first argument for error-handling.
+* `CommunicationError` - This error is thrown if the https request fails e.g. because of a network problem.
+* `SlackError` - If Slack returns an error, this error will be passed to the callback function as the first argument for error-handling.
+* `SlackServiceError` - If Slack returns a non-200 status code, this error will be passed to the callback function as the first argument for error-handling. `SlackServiceError` is different from `SlackError` because the Slack API returns a `200` status code for the kinds of errors identified by `SlackError`.
 
 ## Development and testing
 
@@ -112,3 +115,4 @@ Tests are written for mocha, and can be run with
 ````
 npm test
 ````
+
