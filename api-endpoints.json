@@ -1531,5 +1531,169 @@
         "account_inactive'": "Authentication token is for a deleted user or team."
       }
     }
+  },
+  "reactions": {
+    "add": {
+      "url": "https://slack.com/api/reactions.add",
+      "description": "This method adds a reaction (emoji) to an item (file, file comment, channel message, group message, or direct message). One of file, file_comment, or the combination of channel and timestamp must be specified.",
+      "help": "https://api.slack.com/methods/reactions.add",
+      "arguments": {
+        "token": {
+          "required": true,
+          "description": "Authentication token (Requires scope: post)"
+        },
+        "name": {
+          "required": true,
+          "description": "Reaction (emoji) name."
+        },
+        "file": {
+          "required": false,
+          "description": "File to add reaction to."
+        },
+        "file_comment": {
+          "required": false,
+          "description": "File comment to add reaction to."
+        },
+        "channel": {
+          "required": false,
+          "description": "Channel where the message to add reaction to was posted."
+        },
+        "timestamp": {
+          "required": false,
+          "description": "Timestamp of the message to add reaction to."
+        }
+      },
+      "errors": {
+        "bad_timestamp": "Value passed for timestamp was invalid.",
+        "file_not_found": "File specified by file does not exist.",
+        "file_comment_not_found": "File comment specified by file_comment does not exist.",
+        "message_not_found": "Message specified by channel and timestamp does not exist.",
+        "no_item_specified": "file, file_comment, or combination of channel and timestamp was not specified.",
+        "invalid_name": "Value passed for name was invalid.",
+        "already_reacted": "The specified item already has the user/reaction combination.",
+        "too_many_emoji": "The limit for distinct reactions (i.e emoji) on the item has been reached.",
+        "too_many_reactions": "The limit for reactions a person may add to the item has been reached.",
+        "not_authed": "No authentication token provided.",
+        "invalid_auth": "Invalid authentication token.",
+        "account_inactive": "Authentication token is for a deleted user or team."
+      }
+    },
+    "get": {
+      "url": "https://slack.com/api/reactions.get",
+      "description": "This method returns a list of all reactions for a single item (file, file comment, channel message, group message, or direct message).",
+      "help": "https://api.slack.com/methods/reactions.get",
+      "arguments": {
+        "token": {
+          "required": true,
+          "description": "Authentication token (Requires scope: post)"
+        },
+        "full": {
+          "required": false,
+          "description": "If true always return the complete reaction list."
+        },
+        "file": {
+          "required": false,
+          "description": "File to add reaction to."
+        },
+        "file_comment": {
+          "required": false,
+          "description": "File comment to add reaction to."
+        },
+        "channel": {
+          "required": false,
+          "description": "Channel where the message to add reaction to was posted."
+        },
+        "timestamp": {
+          "required": false,
+          "description": "Timestamp of the message to add reaction to."
+        }
+      },
+      "errors": {
+        "bad_timestamp": "Value passed for timestamp was invalid.",
+        "file_not_found": "File specified by file does not exist.",
+        "file_comment_not_found": "File comment specified by file_comment does not exist.",
+        "message_not_found": "Message specified by channel and timestamp does not exist.",
+        "no_item_specified": "file, file_comment, or combination of channel and timestamp was not specified.",
+        "not_authed": "No authentication token provided.",
+        "invalid_auth": "Invalid authentication token.",
+        "account_inactive": "Authentication token is for a deleted user or team."
+      }
+    },
+    "list": {
+      "url": "https://slack.com/api/reactions.list",
+      "description": "This method returns a list of all items (file, file comment, channel message, group message, or direct message) reacted to by a user.",
+      "help": "https://api.slack.com/methods/reactions.list",
+      "arguments": {
+        "token": {
+          "required": true,
+          "description": "Authentication token (Requires scope: post)"
+        },
+        "user": {
+          "required": false,
+          "description": "Show reactions made by this user. Defaults to the authed user."
+        },
+        "full": {
+          "required": false,
+          "description": "If true always return the complete reaction list."
+        },
+        "count": {
+          "required": false,
+          "description": "Number of items to return per page."
+        },
+        "page": {
+          "required": false,
+          "description": "Page number of results to return."
+        }
+      },
+      "errors": {
+        "user_not_found": "Value passed for user was invalid.",
+        "not_authed": "No authentication token provided.",
+        "invalid_auth": "Invalid authentication token.",
+        "account_inactive": "Authentication token is for a deleted user or team."
+      }
+    },
+    "remove": {
+      "url": "https://slack.com/api/reactions.remove",
+      "description": "This method removes a reaction (emoji) from an item (file, file comment, channel message, group message, or direct message). One of file, file_comment, or the combination of channel and timestamp must be specified.",
+      "help": "https://api.slack.com/methods/reactions.remove",
+      "arguments": {
+        "token": {
+          "required": true,
+          "description": "Authentication token (Requires scope: post)"
+        },
+        "name": {
+          "required": true,
+          "description": "Reaction (emoji) name."
+        },
+        "file": {
+          "required": false,
+          "description": "File to add reaction to."
+        },
+        "file_comment": {
+          "required": false,
+          "description": "File comment to add reaction to."
+        },
+        "channel": {
+          "required": false,
+          "description": "Channel where the message to add reaction to was posted."
+        },
+        "timestamp": {
+          "required": false,
+          "description": "Timestamp of the message to add reaction to."
+        }
+      },
+      "errors": {
+        "bad_timestamp": "Value passed for timestamp was invalid.",
+        "file_not_found": "File specified by file does not exist.",
+        "file_comment_not_found": "File comment specified by file_comment does not exist.",
+        "message_not_found": "Message specified by channel and timestamp does not exist.",
+        "no_item_specified": "file, file_comment, or combination of channel and timestamp was not specified.",
+        "invalid_name": "Value passed for name was invalid.",
+        "no_reaction": "The specified item does not have the user/reaction combination.",
+        "not_authed": "No authentication token provided.",
+        "invalid_auth": "Invalid authentication token.",
+        "account_inactive": "Authentication token is for a deleted user or team."
+      }
+    }
   }
 }
