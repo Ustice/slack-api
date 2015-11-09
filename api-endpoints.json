@@ -31,7 +31,7 @@
       }
     }
   },
-  "channel": {
+  "channels": {
     "archive": {
       "url": "https://slack.com/api/channels.archive",
       "description": "This method archives a channel.",
@@ -68,7 +68,7 @@
           "required": true,
           "description": "Authentication token (Requires scope: read)"
         },
-        "channel": {
+        "name": {
           "required": true,
           "description": "Name of channel to create"
         }
