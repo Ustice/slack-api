@@ -1259,6 +1259,64 @@
       }
     }
   },
+  "reactions": {
+    "add": {
+      "url": "https://slack.com/api/reactions.add",
+      "description": "Add a react. Refer to the RTM API documentation for full details on how to use the RTM API.",
+      "help": "https://api.slack.com/methods/reactions.add",
+      "arguments": {
+        "token": {
+          "required": true,
+          "description": "Authentication token (Requires scope: client)"
+        },
+        "name": {
+          "required": true,
+          "description": "reaction name"
+        },
+        "channel": {
+          "required": false,
+          "description": "channel"
+        },
+        "timestamp": {
+          "required": false,
+          "description": "timestamp"
+        }
+      },
+      "errors": {
+        "not_authed'": "No authentication token provided.",
+        "invalid_auth'": "Invalid authentication token.",
+        "account_inactive'": "Authentication token is for a deleted user or team."
+      }
+    },
+    "get": {
+      "url": "https://slack.com/api/reactions.get",
+      "description": "Get a reaction",
+      "help": "https://api.slack.com/methods/reactions.get",
+      "arguments": {
+        "token": {
+          "required": true,
+          "description": "Authentication token (Requires scope: client)"
+        },
+        "name": {
+          "required": true,
+          "description": "reaction name"
+        },
+        "channel": {
+          "required": false,
+          "description": "channel"
+        },
+        "timestamp": {
+          "required": false,
+          "description": "timestamp"
+        }
+      },
+      "errors": {
+        "not_authed'": "No authentication token provided.",
+        "invalid_auth'": "Invalid authentication token.",
+        "account_inactive'": "Authentication token is for a deleted user or team."
+      }
+    }
+  },
   "rtm": {
     "start": {
       "url": "https://slack.com/api/rtm.start",
