@@ -68,7 +68,7 @@
           "required": true,
           "description": "Authentication token (Requires scope: read)"
         },
-        "channel": {
+        "name": {
           "required": true,
           "description": "Name of channel to create"
         }
@@ -758,7 +758,7 @@
           "required": true,
           "description": "Authentication token (Requires scope: post)"
         },
-        "channel": {
+        "name": {
           "required": true,
           "description": "Name of group to create"
         }
