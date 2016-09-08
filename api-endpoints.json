@@ -594,25 +594,25 @@
     "delete": {
       "url": "https://slack.com/api/files.delete",
       "description": "This method deletes a file in your team.",
-      "help": "This endpoint is not yet officially in the Slack API and may change!",
+      "help": "https://api.slack.com/methods/files.delete",
       "arguments": {
-        "t": {
-          "required": true,
-          "description": "Current datetime in msec"
-        },
         "token": {
           "required": true,
-          "description": "Authentication token (Requires scope: read)"
+          "description": "Authentication token (Requires scope: post)"
         },
         "file": {
           "required": true,
-          "description": "File to fetch info for"
+          "description": "ID of file to delete."
         }
       },
       "errors": {
-        "file_not_found'": "Value passed for file was invalid",
+        "file_not_found'": "The file does not exist, or is not visible to the calling user.",
+        "file_deleted": "The file has already been deleted.",
+        "cant_delete_file": "Authenticated user does not have permission to delete this file.",
         "not_authed'": "No authentication token provided.",
-        "invalid_auth'": "Invalid authentication token."
+        "invalid_auth'": "Invalid authentication token.",
+        "account_inactive": "Authentication token is for a deleted user or team.",
+        "user_is_bot": "This method cannot be called by a bot user."
       }
     },
     "list": {
