@@ -834,6 +834,27 @@
         "account_inactive'": "Authentication token is for a deleted user or team."
       }
     },
+    "info": {
+      "url": "https://slack.com/api/groups.info",
+      "description": "This method returns information about a private channel.",
+      "help": "https://api.slack.com/methods/groups.info",
+      "arguments": {
+        "token": {
+          "required": true,
+          "description": "Authentication token (Requires scope: read)"
+        },
+        "channel": {
+          "required": true,
+          "description": "Private channel to get info on"
+        }
+      },
+      "error": {
+        "channel_not_found'": "Value passed for channel was invalid.",
+        "not_authed'": "No authentication token provided.",
+        "invalid_auth'": "Invalid authentication token.",
+        "account_inactive'": "Authentication token is for a deleted user or team."
+      }
+    },
     "invite": {
       "url": "https://slack.com/api/groups.invite",
       "description": "This method is used to invite a user to a private group. The calling user must be a member of the group.\n\nTo invite a new member to a group without giving them access to the archives of the group call the groups.createChild method before inviting.",
