@@ -1569,6 +1569,23 @@
         "account_inactive'": "Authentication token is for a deleted user or team."
       }
     },
+    "identity": {
+      "url": "https://slack.com/api/users.identity",
+      "description": "This method let's you retrieve a user's identity",
+      "help": "https://api.slack.com/methods/users.identity",
+      "arguments": {
+        "token": {
+          "required": true,
+          "description": "Authentication token (Requires scope: identity.basic)"
+        }
+      },
+      "errors": {
+        "not_authed'": "No authentication token provided.",
+        "invalid_auth'": "Invalid authentication token.",
+        "account_inactive'": "Authentication token is for a deleted user or team.",
+        "user_is_bot": "This method cannot be called by a bot user."
+      }
+    },
     "list": {
       "url": "https://slack.com/api/users.list",
       "description": "This method returns a list of all users in the team. This includes deleted/deactivated users.",
