@@ -39,14 +39,14 @@
   },
   "homepage": "https://github.com/ustice/slack-api",
   "dependencies": {
-    "bluebird": "^2.9.3",
+    "bluebird": "^3.5.0",
     "error-factory": "^0.1.4",
-    "lodash": "^2.4.1",
-    "superagent": "^0.21.0"
+    "lodash": "^4.17.4",
+    "superagent": "^3.5.2"
   },
   "devDependencies": {
-    "chai": "^1.10.0",
-    "mocha": "^2.1.0",
-    "should": "~7.0.2"
+    "chai": "^4.1.0",
+    "mocha": "^3.5.0",
+    "should": "~11.2.1"
   }
 }
