@@ -143,7 +143,7 @@ function apiMethod(sectionName, methodName) {
           } else {
             return done(new SlackServiceError('Did not receive a successful response from Slack.', {
               errorDetails: {
-                errorCode: response.statusCode,
+                errorCode: response.status,
                 errorResponse: response.body
               }
             }), null);
